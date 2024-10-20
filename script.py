@@ -51,5 +51,5 @@ def ItRenewer(Username,Password,Product):
 
 Username = os.environ['USERNAME']
 Password = os.environ['PASSWORD']
-Product = 'Adobe สำหรับนิสิต'
+Product = 'Adobe ด้านกราฟิก สำหรับนิสิต'
 ItRenewer(Username,Password,Product)
