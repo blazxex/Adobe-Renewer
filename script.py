@@ -30,7 +30,7 @@ def ItRenewer(Username,Password,Product):
 
     signin_button = driver.find_element(By.XPATH, '//button')
     signin_button.click()
-    
+    time.sleep(2)
     driver.get('https://licenseportal.it.chula.ac.th/Home/Borrow')
     
     dropdown = Select(driver.find_element(By.ID,'ProgramLicenseID'))
@@ -41,7 +41,7 @@ def ItRenewer(Username,Password,Product):
     expiry_date_input = driver.find_element(By.ID, 'ExpiryDateStr')
     week = datetime.now() + timedelta(days=7)
     driver.execute_script("arguments[0].value = arguments[1];", expiry_date_input, week.strftime('%d/%m/%Y'))
-
+    time.sleep(2)
     save_button = driver.find_element(By.XPATH, '//button[@type="submit"]')
     save_button.click()
     print(driver.title)
