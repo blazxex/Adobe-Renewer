@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions #check if that elemen
 from selenium.webdriver.support.ui import Select
 from datetime import datetime, timedelta
 import os
+import time
 
 def ItRenewer(Username,Password,Product):
     options = Options()
