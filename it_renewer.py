@@ -1,15 +1,20 @@
+from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions #check if that element present
+from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import Select
 from datetime import datetime, timedelta
-import os
+import json
 import time
 
-def ItRenewer(Username,Password,Product):
+display = Display(visible=0, size=(1920, 1080))
+display.start()
+
+def ItRenewer(Username, Password, Product):
     options = Options()
+    options.binary_location = "/usr/bin/chromium"  # important for slim
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
@@ -17,11 +22,9 @@ def ItRenewer(Username,Password,Product):
     driver = webdriver.Chrome(options=options)  
 
     driver.get('https://licenseportal.it.chula.ac.th/')
-
     wait = WebDriverWait(driver, 10)
     wait.until(expected_conditions.presence_of_element_located((By.XPATH, '//input')))
     print(driver.title)
-
 
     username_input = driver.find_element(By.ID, 'UserName')
     username_input.send_keys(Username)
@@ -33,12 +36,12 @@ def ItRenewer(Username,Password,Product):
     signin_button.click()
     time.sleep(2)
     driver.get('https://licenseportal.it.chula.ac.th/Home/Borrow')
-    
-    dropdown = Select(driver.find_element(By.ID,'ProgramLicenseID'))
+
+    dropdown = Select(driver.find_element(By.ID, 'ProgramLicenseID'))
     dropdown.select_by_visible_text(Product)  
 
-    wait.until(expected_conditions .presence_of_all_elements_located((By.ID, 'ExpiryDateStr')))
-    
+    wait.until(expected_conditions.presence_of_all_elements_located((By.ID, 'ExpiryDateStr')))
+
     expiry_date_input = driver.find_element(By.ID, 'ExpiryDateStr')
     week = datetime.now() + timedelta(days=7)
     driver.execute_script("arguments[0].value = arguments[1];", expiry_date_input, week.strftime('%d/%m/%Y'))
@@ -49,8 +52,19 @@ def ItRenewer(Username,Password,Product):
 
     driver.quit()
 
-###
-Username = os.environ['USERNAME']
-Password = os.environ['PASSWORD']
+print("Script started...")
+
+print("Loading config...")
+with open('config.json') as f:
+    config = json.load(f)
+
+print("Config loaded")
+Username = config['USERNAME']
+Password = config['PASSWORD']
 Product = 'Adobe ด้านกราฟิก สำหรับนิสิต'
-ItRenewer(Username,Password,Product)
+
+print("Calling ItRenewer...")
+ItRenewer(Username, Password, Product)
+print("Done")
+
+display.stop()
