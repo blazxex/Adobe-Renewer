@@ -9,12 +9,10 @@ from datetime import datetime, timedelta
 import json
 import time
 
-display = Display(visible=0, size=(1920, 1080))
-display.start()
+
 
 def ItRenewer(Username, Password, Product):
     options = Options()
-    options.binary_location = "/usr/bin/chromium"  # important for slim
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
@@ -67,4 +65,3 @@ print("Calling ItRenewer...")
 ItRenewer(Username, Password, Product)
 print("Done")
 
-display.stop()
